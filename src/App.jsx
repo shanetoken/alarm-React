@@ -26,10 +26,8 @@ function App() {
   };
 
   useEffect(() => {
-    if (Math.floor((elapsedTime % (60 * 60 * 1000)) / (60 * 1000)) >= 30 && isRunning) {
-      sound.play().catch((error) => {
-        console.error("Error playing sound:", error);
-      });
+    if (elapsedTime >= 3000 && isRunning) {
+      sound.play();
     }
   }, [elapsedTime, isRunning]); // Update when elapsedTime or isRunning changes
 
