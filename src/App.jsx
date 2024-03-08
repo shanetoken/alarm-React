@@ -7,6 +7,7 @@ function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
 
+  // Update time
   useEffect(() => {
     let interval;
     if (isRunning) {
@@ -25,9 +26,12 @@ function App() {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${miliseconds.toString().padStart(3, '0')}`;
   };
 
+  // Play Sound
   useEffect(() => {
-    if (elapsedTime >= 3000 && isRunning) {
-      sound.play();
+    if (elapsedTime >= (30 * 60 * 1000) && isRunning) {
+      sound.play().catch((error) => {
+        console.error("Error playing sound:", error);
+      });
     }
   }, [elapsedTime, isRunning]); // Update when elapsedTime or isRunning changes
 
