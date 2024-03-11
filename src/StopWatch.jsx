@@ -1,23 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
-import './App.css';
 
 const sound = new Audio('https://www.sousound.com/music/jazz_fusion/jazz_01.mp3');
 
-function StopWatch() {
+function StopWatch(sound) {
   const [isRunning, setIsRunning] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
 
   // Update time
   useEffect(() => {
-    let interval;
     if (isRunning) {
-      interval = setInterval(() => {
+      const intervalId = setInterval(() => {
         setElapsedTime((prevTime) => prevTime + 100);
       }, 100);
+      return () => clearInterval(intervalId);
     }
-
-    return () => clearInterval(interval);
-  }, [isRunning]); // Only update effect when isRunning changes
+  }, [isRunning]);
 
   const formattedTime = () => {
     const minutes = Math.floor((elapsedTime % (60 * 60 * 1000)) / (60 * 1000));
