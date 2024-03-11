@@ -1,65 +1,44 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
 
-const sound = new Audio('https://www.sousound.com/music/jazz_fusion/jazz_01.mp3');
 
 function App() {
-  const [isRunning, setIsRunning] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0);
 
-  // Update time
-  useEffect(() => {
-    let interval;
-    if (isRunning) {
-      interval = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 100);
-      }, 100);
-    }
+  const message = [
+    "Learn React ⚛️",
+    "Get a job 💼",
+    "Go home 🛫"
+  ]
 
-    return () => clearInterval(interval);
-  }, [isRunning]); // Only update effect when isRunning changes
+  const [step, setStep] = useState(1)
 
-  const formattedTime = () => {
-    const minutes = Math.floor((elapsedTime % (60 * 60 * 1000)) / (60 * 1000));
-    const seconds = Math.floor((elapsedTime % (60 * 1000)) / 1000);
-    const miliseconds = Math.floor(elapsedTime % 1000);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${miliseconds.toString().padStart(3, '0')}`;
-  };
+  const disableStyle = step < 1 || step > 3? 'disabled' : ''
 
-  // Play Sound
-  useEffect(() => {
-    if (elapsedTime >= (30 * 60 * 1000) && isRunning) {
-      sound.play().catch((error) => {
-        console.error("Error playing sound:", error);
-      });
-    }
-  }, [elapsedTime, isRunning]); // Update when elapsedTime or isRunning changes
+  const handleBack = () => {
+    setStep((s) => s - 1)
+  }
 
-  const handleStart = () => {
-    setIsRunning(true);
-  };
-
-  const handleStop = () => {
-    setIsRunning(false);
-    sound.pause(); // Pause sound on stop
-  };
-
-  const handleReset = () => {
-    setIsRunning(false);
-    setElapsedTime(0);
-    sound.currentTime = 0; // Reset sound position on reset
-  };
+  const handleNext = () => {
+    setStep((s) => s + 1)
+  }
 
   return (
     <>
-      <div className="stopwatch">
-        <div id="stopwatch">{formattedTime()}</div>
-        <div id="text-stop-watch">M : S : ML</div>
+      <div className='steps'>
+        <div className={step >= 1? "active" : ""}>
+          1
+        </div>
+        <div className={step >= 2? "active" : ""}>
+          2
+        </div>
+        <div className={step >= 3? "active" : ""}> 
+          3
+        </div>
       </div>
-      <div className="btn-watch">
-        <button onClick={handleStart} disabled={isRunning}>Start</button>
-        <button onClick={handleStop} disabled={!isRunning}>Stop</button>
-        <button onClick={handleReset}>Reset</button>
+      <h1 className='message'>Step {step} : {message[step - 1]}</h1>
+      <div className='btn-step'>
+        <button onClick={handleBack} disabled={step === 1}>Back</button>
+        <button onClick={handleNext} disabled={step === 3}>Next</button>
       </div>
     </>
   );
