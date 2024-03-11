@@ -25,17 +25,15 @@ function App() {
   return (
     <>
       <div className='steps'>
-        <div className={step >= 1? "active" : ""}>
-          1
-        </div>
-        <div className={step >= 2? "active" : ""}>
-          2
-        </div>
-        <div className={step >= 3? "active" : ""}> 
-          3
-        </div>
+        
+        {Array.from({ length: 3 }, (_, i) => (
+            <span key={i} className={i < step ? "active" : ""}>{i + 1}</span>
+        ))}
+
       </div>
+      
       <h1 className='message'>Step {step} : {message[step - 1]}</h1>
+
       <div className='btn-step'>
         <button onClick={handleBack} disabled={step === 1}>Back</button>
         <button onClick={handleNext} disabled={step === 3}>Next</button>
